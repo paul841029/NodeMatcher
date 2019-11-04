@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+
+\bibitem{Anton2005XPathWrapperIB}
+Tobias Anton.
+\newblock Xpath-wrapper induction by generating tree traversal patterns.
+\newblock In {\em LWA}, 2005.
+
+\bibitem{dalvi2011automatic}
+Nilesh Dalvi, Ravi Kumar, and Mohamed Soliman.
+\newblock Automatic wrappers for large scale web extraction.
+\newblock {\em Proceedings of the VLDB Endowment}, 4(4):219--230, 2011.
+
+\bibitem{Le2014FlashExtractAF}
+Vu~Le and Sumit Gulwani.
+\newblock Flashextract: a framework for data extraction by examples.
+\newblock In {\em PLDI}, 2014.
+
+\bibitem{yaghmazadeh2018automated}
+Navid Yaghmazadeh, Xinyu Wang, and Isil Dillig.
+\newblock Automated migration of hierarchical data to relational tables using
+  programming-by-example.
+\newblock {\em Proceedings of the VLDB Endowment}, 11(5):580--593, 2018.
+
+\end{thebibliography}

@@ -1,4 +1,6 @@
 from lxml import etree
+from model.graph import Graph
+
 
 class Parser(object):
     def __init__(self, file_path):
@@ -11,4 +13,5 @@ class Parser(object):
             self.xml_tree = etree.parse(f)
 
     def parse(self):
-
+        graph = Graph()
+        return graph

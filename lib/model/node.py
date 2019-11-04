@@ -1,2 +1,5 @@
 class Node(object):
-    pass
+    def __init__(self):
+        self.children = []
+        self.previous = None
+        self.next = None

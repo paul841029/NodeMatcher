@@ -6,7 +6,6 @@ from model.node import Node
 class Parser(object):
     def __init__(self, file_path):
         self.xml_tree = None
-
         self._load_etree(file_path)
 
     def _load_etree(self, file_path):

@@ -1,10 +1,12 @@
 from lxml import etree
 from os.path import abspath
+from pprint import pprint
 
 class Evaluator(object):
-    def __init__(self, train, test):
+    def __init__(self, train, test, gt_tag):
         self.train_file = train
         self.test_file = test
+        self.gt_tag = gt_tag
 
     def _file_name_to_tree(self, file):
         trees = []
@@ -20,11 +22,11 @@ class Evaluator(object):
 
     def train(self, train_method):
         train_trees = self._file_name_to_tree(self.train_file)
-        train_method.fit(train_trees)
+        train_method.fit(train_trees, self.gt_tag)
 
     def eval(self, train_method, output_file=None):
         test_trees = self._file_name_to_tree(self.test_file)
-        tp, fp, fn = train_method.predict(test_trees)
+        tp, fp, fn = train_method.predict(test_trees, self.gt_tag)
 
         p, r, f = 0, 0, 0
 
@@ -42,4 +44,8 @@ class Evaluator(object):
             pass
 
         if output_file is None:
-            print(p, r, f)
+            pprint({
+                "p": p,
+                "r": r,
+                "f": f
+            }, width=1)

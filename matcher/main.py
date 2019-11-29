@@ -1,10 +1,9 @@
-import argparse
-from parser.parser import Parser
+from evaluator.evaluator import Evaluator
+from train.train import Naive
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-f', "--input_file")
+eval = Evaluator("/home/paulluh/CS703_project/matcher/exp/wiki/train",
+                 "/home/paulluh/CS703_project/matcher/exp/wiki/test")
 
-args = parser.parse_args()
-graph = Parser.parse(args.input_file)
-
-
+n = Naive()
+eval.train(n)
+eval.eval(n)

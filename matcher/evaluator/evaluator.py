@@ -7,16 +7,18 @@ class Evaluator(object):
         self.train_file = train
         self.test_file = test
         self.gt_tag = gt_tag
+        self.dataset = None
 
     def _file_name_to_tree(self, file):
         trees = []
         dataset = abspath(file).split('/')[-2]
+        self.dataset = dataset
         with open(file, "r") as mata:
             for file_name in mata.readlines():
                 file_name = file_name.strip()
                 with open("/home/paulluh/CS703_project/matcher/data/%s/html/%s" % (dataset, file_name)) as f:
                     trees.append(
-                        etree.parse(f)
+                        etree.parse(f, etree.HTMLParser())
                     )
         return trees
 
@@ -47,5 +49,8 @@ class Evaluator(object):
             pprint({
                 "p": p,
                 "r": r,
-                "f": f
-            }, width=1)
+                "f": f,
+                "method": str(train_method),
+                "gt-tag": self.gt_tag,
+                "dataset": self.dataset
+            }, indent=4)

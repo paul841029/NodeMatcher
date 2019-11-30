@@ -1,4 +1,4 @@
-from .model import Xpath
+from .model import Xpath, XpathEnsemble
 from loguru import logger
 
 
@@ -44,11 +44,25 @@ class Naive(Train):
         if len(xpath_candidate) == 1:
             self.trained_model = Xpath(list(xpath_candidate)[0])
         else:
-            raise RuntimeError("Incosistent xpath in candidates")
+            raise RuntimeError("Inconsistent xpath in candidates")
 
     def __str__(self):
         return "Naive (only consider tags on path)"
 
+class NaiveEnsemble(Train):
+    def fit(self, train_trees, gt_tag):
+        xpath_candidate = set()
+        for t in train_trees:
+            try:
+                node = t.xpath("//*[@gt='%s']" % gt_tag)[0]
+                xpath_candidate.add(t.getpath(node))
+            except:
+                logger.error("gt not found")
+
+        self.trained_model = XpathEnsemble(list(xpath_candidate))
+
+    def __str__(self):
+        return "Ensemble of induced naive xpath (tag & pos)"
 
 class NaiveSibling(Train):
     pass

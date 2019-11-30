@@ -1,6 +1,9 @@
 from lxml import etree
 from os.path import abspath
 from pprint import pprint
+from random import sample
+from loguru import logger
+from csv import DictWriter
 
 class Evaluator(object):
     def __init__(self, train, test, gt_tag):
@@ -8,13 +11,22 @@ class Evaluator(object):
         self.test_file = test
         self.gt_tag = gt_tag
         self.dataset = None
+        self.train_size = None
 
-    def _file_name_to_tree(self, file):
+    def _file_name_to_tree(self, file, sample_size=None):
         trees = []
         dataset = abspath(file).split('/')[-2]
         self.dataset = dataset
         with open(file, "r") as mata:
-            for file_name in mata.readlines():
+            filenames = list(mata.readlines())
+
+            if sample_size is not None and sample_size < len(filenames):
+                sampled_files = sample(filenames, sample_size)
+                logger.info("Sampling %s train files" % sample_size)
+            else:
+                sampled_files = filenames
+
+            for file_name in sampled_files:
                 file_name = file_name.strip()
                 with open("/home/paulluh/CS703_project/matcher/data/%s/html/%s" % (dataset, file_name)) as f:
                     trees.append(
@@ -22,8 +34,9 @@ class Evaluator(object):
                     )
         return trees
 
-    def train(self, train_method):
-        train_trees = self._file_name_to_tree(self.train_file)
+    def train(self, train_method, sample_size=None):
+        train_trees = self._file_name_to_tree(self.train_file, sample_size)
+        self.train_size = len(train_trees)
         train_method.fit(train_trees, self.gt_tag)
 
     def eval(self, train_method, output_file=None):
@@ -44,13 +57,28 @@ class Evaluator(object):
             f = 2 * p * r / (p + r)
         except:
             pass
-
+        output_stats = {
+            "prec": p,
+            "recal": r,
+            "f1": f,
+            "method": str(train_method),
+            "gt-tag": self.gt_tag,
+            "dataset": self.dataset,
+            "train-size": self.train_size
+        }
         if output_file is None:
-            pprint({
-                "p": p,
-                "r": r,
-                "f": f,
-                "method": str(train_method),
-                "gt-tag": self.gt_tag,
-                "dataset": self.dataset
-            }, indent=4)
+            pprint(output_stats, indent=4)
+        else:
+            with open(output_file, "a") as f:
+                dw = DictWriter(f, fieldnames=[
+                    'dataset',
+                    'gt-tag',
+                    'train-size',
+                    'method',
+                    'prec',
+                    'recal',
+                    'f1'
+                ])
+                dw.writerow(
+                    output_stats
+                )

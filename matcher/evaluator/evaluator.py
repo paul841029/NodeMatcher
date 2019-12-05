@@ -13,6 +13,9 @@ class Evaluator(object):
         self.dataset = None
         self.train_size = None
 
+        with open(train, "r") as f:
+            self.total_train_size = len(list(f.readline()))
+
     def _file_name_to_tree(self, file, sample_size=None):
         trees = []
         dataset = abspath(file).split('/')[-2]
@@ -64,21 +67,32 @@ class Evaluator(object):
             "method": str(train_method),
             "gt-tag": self.gt_tag,
             "dataset": self.dataset,
-            "train-size": self.train_size
+            "train-size": self.train_size,
+            "test-size": len(test_trees)
         }
         if output_file is None:
             pprint(output_stats, indent=4)
         else:
-            with open(output_file, "a") as f:
+
+            try:
+                with open(output_file, "r") as f:
+                    has_header = True
+            except FileNotFoundError:
+                has_header = False
+
+            with open(output_file, "a+") as f:
                 dw = DictWriter(f, fieldnames=[
                     'dataset',
                     'gt-tag',
                     'train-size',
+                    'test-size',
                     'method',
                     'prec',
                     'recal',
                     'f1'
                 ])
+                if not has_header:
+                    dw.writeheader()
                 dw.writerow(
                     output_stats
                 )

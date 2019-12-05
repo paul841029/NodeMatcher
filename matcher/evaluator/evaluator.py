@@ -14,7 +14,7 @@ class Evaluator(object):
         self.train_size = None
 
         with open(train, "r") as f:
-            self.total_train_size = len(list(f.readline()))
+            self.total_train_size = len(list(f.readlines()))
 
     def _file_name_to_tree(self, file, sample_size=None):
         trees = []
@@ -42,10 +42,26 @@ class Evaluator(object):
         self.train_size = len(train_trees)
         train_method.fit(train_trees, self.gt_tag)
 
-    def eval(self, train_method, output_file=None):
-        test_trees = self._file_name_to_tree(self.test_file)
-        tp, fp, fn = train_method.predict(test_trees, self.gt_tag)
+    def adaptive_training(self, models):
+        train_trees = self._file_name_to_tree(self.train_file)
+        train = train_trees[:int(len(train_trees)/2)]
+        val = train_trees[int(len(train_trees)/2):]
 
+        model = None
+        f1_score = 0
+
+        for m in models:
+            m_obj = m()
+            m_obj.fit(train, self.gt_tag)
+            _, _, f = self.get_prf(*m_obj.predict(val, self.gt_tag))
+            if f > f1_score:
+                f1_score = f
+                model = m
+
+        return model
+
+
+    def get_prf(self, tp, fp, fn):
         p, r, f = 0, 0, 0
 
         try:
@@ -60,6 +76,13 @@ class Evaluator(object):
             f = 2 * p * r / (p + r)
         except:
             pass
+
+        return p, r, f
+
+    def eval(self, train_method, output_file=None):
+        test_trees = self._file_name_to_tree(self.test_file)
+        tp, fp, fn = train_method.predict(test_trees, self.gt_tag)
+        p, r, f = self.get_prf(tp, fp, fn)
         output_stats = {
             "prec": p,
             "recal": r,

@@ -5,6 +5,7 @@ from random import sample
 from loguru import logger
 from csv import DictWriter
 
+
 class Evaluator(object):
     def __init__(self, train, test, gt_tag):
         self.train_file = train
@@ -44,8 +45,8 @@ class Evaluator(object):
 
     def adaptive_training(self, models):
         train_trees = self._file_name_to_tree(self.train_file)
-        train = train_trees[:int(len(train_trees)/2)]
-        val = train_trees[int(len(train_trees)/2):]
+        train = train_trees[:int(len(train_trees) / 2)]
+        val = train_trees[int(len(train_trees) / 2):]
 
         model = None
         f1_score = 0
@@ -59,7 +60,6 @@ class Evaluator(object):
                 model = m
 
         return model
-
 
     def get_prf(self, tp, fp, fn):
         p, r, f = 0, 0, 0

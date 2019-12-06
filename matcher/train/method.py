@@ -47,7 +47,7 @@ class Naive(Train):
             raise RuntimeError("Inconsistent xpath in candidates")
 
     def __str__(self):
-        return "Naive (only consider tags on path)"
+        return "Tags on path"
 
 
 class NaiveEnsemble(Train):
@@ -63,7 +63,7 @@ class NaiveEnsemble(Train):
         self.trained_model = XpathEnsemble(list(xpath_candidate))
 
     def __str__(self):
-        return "Ensemble of induced naive xpath (tag & pos)"
+        return "Ensemble of tags and positions"
 
 
 class AugmentText(Train):
@@ -130,4 +130,4 @@ class AugmentText(Train):
             raise RuntimeError("Inconsistent xpath in candidates")
 
     def __str__(self):
-        return "Path of tags with text augmentation [depth=%d]" % self.depth
+        return "Ancestors and siblings and their text attributes"

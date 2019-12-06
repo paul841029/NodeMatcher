@@ -18,7 +18,7 @@ with open(args.input, 'r') as f:
     df = read_csv(f)
 
 for mt in ['prec', 'recal', 'f1']:
-    lineplot(x='train-size', y=mt, hue='method', data=df)
+    lineplot(x='train-size', y=mt, hue='method', data=df, alpha=0.5, style='method')
     plt.xlabel("# input-example")
     plt.ylabel(mt)
     plt.title("%s -- %s" % (args.gt, mt))

@@ -22,6 +22,6 @@ for mt in ['prec', 'recal', 'f1']:
     plt.xlabel("# input-example")
     plt.ylabel(mt)
     plt.title("%s -- %s" % (args.gt, mt))
-    plt.savefig(join(args.dataset, args.gt, '%s.png' % mt))
+    plt.savefig(join(args.dataset, args.gt, '%s.pdf' % mt))
     plt.clf()
 

@@ -58,7 +58,7 @@ class NaiveEnsemble(Train):
                 node = t.xpath("//*[@gt='%s']" % gt_tag)[0]
                 xpath_candidate.add(t.getpath(node))
             except:
-                logger.error("gt not found")
+                logger.debug("gt not found")
 
         self.trained_model = XpathEnsemble(list(xpath_candidate))
 

@@ -1,0 +1,25 @@
+dataset,train-size,test-size,method,prec,recal,f1
+wiki (wiki-pol-party),2,36,Ancestors and siblings and their text attributes,1.0,1.0,1.0
+wiki (wiki-pol-party),4,36,Ancestors and siblings and their text attributes,1.0,1.0,1.0
+wiki (wiki-pol-party),6,36,Ancestors and siblings and their text attributes,1.0,1.0,1.0
+wiki (wiki-pol-party),8,36,Ancestors and siblings and their text attributes,1.0,1.0,1.0
+amz (amz-title),2,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),4,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),6,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),8,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),10,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),12,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),14,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),16,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),18,77,Tags on path,1.0,1.0,1.0
+amz (amz-title),20,77,Tags on path,1.0,1.0,1.0
+amz (amz-price),2,77,Ensemble of tags and positions,1.0,0.6056338028169014,0.7543859649122806
+amz (amz-price),4,77,Ensemble of tags and positions,1.0,0.6056338028169014,0.7543859649122806
+amz (amz-price),6,77,Ensemble of tags and positions,1.0,0.7323943661971831,0.8455284552845529
+amz (amz-price),8,77,Ensemble of tags and positions,1.0,0.7323943661971831,0.8455284552845529
+amz (amz-price),10,77,Ensemble of tags and positions,1.0,0.7323943661971831,0.8455284552845529
+amz (amz-price),12,77,Ensemble of tags and positions,1.0,0.7323943661971831,0.8455284552845529
+amz (amz-price),14,77,Ensemble of tags and positions,1.0,0.7323943661971831,0.8455284552845529
+amz (amz-price),16,77,Ensemble of tags and positions,1.0,0.7323943661971831,0.8455284552845529
+amz (amz-price),18,77,Ensemble of tags and positions,1.0,0.7323943661971831,0.8455284552845529
+amz (amz-price),20,77,Ensemble of tags and positions,1.0,0.7323943661971831,0.8455284552845529

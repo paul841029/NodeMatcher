@@ -13,6 +13,7 @@ class Evaluator(object):
         self.gt_tag = gt_tag
         self.dataset = None
         self.train_size = None
+        self.cached_train_tree = None
 
         with open(train, "r") as f:
             self.total_train_size = len(list(f.readlines()))
@@ -39,12 +40,27 @@ class Evaluator(object):
         return trees
 
     def train(self, train_method, sample_size=None):
-        train_trees = self._file_name_to_tree(self.train_file, sample_size)
-        self.train_size = len(train_trees)
-        train_method.fit(train_trees, self.gt_tag)
 
-    def adaptive_training(self, models):
+        if self.cached_train_tree is None:
+            train_trees = self._file_name_to_tree(self.train_file, sample_size)
+        else:
+            train_trees = self.cached_train_tree
+
+        self.train_size = len(train_trees)
+        logger.info("Loading %s annotated documents from %s ..." % (self.train_size, self.train_file))
+        logger.info("Learning extraction program for %s ..." % self.gt_tag)
+        train_method.fit(train_trees, self.gt_tag)
+        logger.info("Learned program: \n\t%s" % str(train_method.trained_model))
+
+
+
+    def adaptive_training(self, models, sample_size=None):
         train_trees = self._file_name_to_tree(self.train_file)
+
+        if sample_size is not None:
+            train_trees = sample(train_trees, sample_size)
+            self.cached_train_tree = train_trees
+
         train = train_trees[:int(len(train_trees) / 2)]
         val = train_trees[int(len(train_trees) / 2):]
 
@@ -53,7 +69,10 @@ class Evaluator(object):
 
         for m in models:
             m_obj = m()
-            m_obj.fit(train, self.gt_tag)
+            try:
+                m_obj.fit(train, self.gt_tag)
+            except RuntimeError:
+                continue
             _, _, f = self.get_prf(*m_obj.predict(val, self.gt_tag))
             if f > f1_score:
                 f1_score = f
@@ -88,8 +107,7 @@ class Evaluator(object):
             "recal": r,
             "f1": f,
             "method": str(train_method),
-            "gt-tag": self.gt_tag,
-            "dataset": self.dataset,
+            "dataset": "%s (%s)" % (self.dataset, self.gt_tag),
             "train-size": self.train_size,
             "test-size": len(test_trees)
         }
@@ -106,7 +124,6 @@ class Evaluator(object):
             with open(output_file, "a+") as f:
                 dw = DictWriter(f, fieldnames=[
                     'dataset',
-                    'gt-tag',
                     'train-size',
                     'test-size',
                     'method',

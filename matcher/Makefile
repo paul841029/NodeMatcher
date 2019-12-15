@@ -2,8 +2,8 @@ generate_csv:
 	python main.py\
 		--dataset ${dataset}\
 		--gt ${gt}\
-		--output csv/${dataset}_${gt}.csv
+		--output csv/adaptive.csv
 	python draw.py\
-		--input csv/${dataset}_${gt}.csv\
+		--input csv/adaptive.csv\
 		--dataset ${dataset}\
 		--gt ${gt}

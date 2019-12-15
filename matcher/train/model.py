@@ -1,3 +1,4 @@
+from pprint import pformat
 class Model(object):
     def __call__(self, tree):
         pass
@@ -10,7 +11,7 @@ class Xpath(Model):
         return set(tree.xpath(self.xpath))
 
     def __str__(self):
-        return self.xpath
+        return "Naive xpath: %s" % self.xpath
 
 class XpathEnsemble(Model):
     def __init__(self, xpath):
@@ -23,7 +24,7 @@ class XpathEnsemble(Model):
         return extracted
 
     def __str__(self):
-        return self.xpath
+        return" Ensemble: %s " % pformat(self.xpath)
 
 
 

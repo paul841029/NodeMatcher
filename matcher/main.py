@@ -14,9 +14,9 @@ args = argparser.parse_args()
 eval = Evaluator("/home/paulluh/CS703_project/matcher/exp/%s/train" % args.dataset,
                  "/home/paulluh/CS703_project/matcher/exp/%s/test" % args.dataset, args.gt)
 
-# n = eval.adaptive_training([Naive, NaiveEnsemble, AugmentText])
-for m in [Naive, NaiveEnsemble, AugmentText]:
+# for m in [Naive, NaiveEnsemble, AugmentText]:
+for i in range(2, eval.total_train_size+1, 2):
+    m = eval.adaptive_training([Naive, NaiveEnsemble, AugmentText], sample_size=i)
     n = m()
-    for i in range(1, eval.total_train_size+1):
-        eval.train(n, sample_size=i)
-        eval.eval(n, args.output)
+    eval.train(n)
+    eval.eval(n, args.output)

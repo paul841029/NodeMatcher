@@ -12,16 +12,16 @@ argparser.add_argument("--dataset")
 argparser.add_argument("--gt")
 args = argparser.parse_args()
 
-Path(join(args.dataset, args.gt)).mkdir(parents=True, exist_ok=True)
+Path('adaptive').mkdir(parents=True, exist_ok=True)
 
 with open(args.input, 'r') as f:
     df = read_csv(f)
 
 for mt in ['prec', 'recal', 'f1']:
-    lineplot(x='train-size', y=mt, hue='method', data=df, alpha=0.5, style='method')
+    lineplot(x='train-size', y=mt, hue='dataset', data=df, alpha=0.8, style='dataset', palette="cubehelix")
     plt.xlabel("# input-example")
     plt.ylabel(mt)
-    plt.title("%s -- %s" % (args.gt, mt))
-    plt.savefig(join(args.dataset, args.gt, '%s.png' % mt))
+    plt.title("adaptive -- %s" % mt)
+    plt.savefig('adaptive/%s.pdf' % mt)
     plt.clf()
 
